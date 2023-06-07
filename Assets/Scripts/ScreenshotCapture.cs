@@ -6,6 +6,7 @@ using UnityEngine.XR.ARFoundation;
 
 public class ScreenshotCapture : MonoBehaviour
 {
+    public GameObject ui;
     public float planeDisableDuration = 0.3f;
     private ARPlaneManager arPlane;
 
@@ -21,11 +22,16 @@ public class ScreenshotCapture : MonoBehaviour
 
     private IEnumerator TakeScreenshot()
     {
+        ui.SetActive(false);
+
         foreach (var plane in arPlane.trackables)
         {
             plane.gameObject.SetActive(false);
         }
-        yield return new WaitForSeconds(0.5f);
+
+
+        //yield return new WaitForSeconds(0.5f);
+        yield return new WaitForEndOfFrame();
         // 스크린샷 이미지 생성
         Texture2D screenshotTexture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
         screenshotTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
@@ -57,6 +63,8 @@ public class ScreenshotCapture : MonoBehaviour
         {
             plane.gameObject.SetActive(true);
         }
+
+        ui.SetActive(true);
 
 
         // 안드로이드에서 미디어 스캔 실행

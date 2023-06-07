@@ -6,6 +6,9 @@ using UnityEngine.XR.ARFoundation;
 
 public class ScreenshotCaptureFront : MonoBehaviour
 {
+    public GameObject ui;
+
+
     // 스크린샷 찍기
     public void CaptureScreenshot()
     {
@@ -14,7 +17,9 @@ public class ScreenshotCaptureFront : MonoBehaviour
 
     private IEnumerator TakeScreenshot()
     {
-        yield return new WaitForSeconds(0.5f);
+        ui.SetActive(false);
+        yield return new WaitForEndOfFrame();
+        //yield return new WaitForSeconds(0.5f);
         // 스크린샷 이미지 생성
         Texture2D screenshotTexture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
         screenshotTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
@@ -41,6 +46,9 @@ public class ScreenshotCaptureFront : MonoBehaviour
 
         // 완료 메시지 출력
         Debug.Log("스크린샷이 저장되었습니다. 경로: " + screenshotPath);
+
+        ui.SetActive(true);
+
 
 
         // 안드로이드에서 미디어 스캔 실행

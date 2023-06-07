@@ -9,7 +9,7 @@ public class ObjectCreator : MonoBehaviour
     private GameObject createdObject;
     private bool isDragging = false;
     private bool isTouchingObject = false;
-    private float pressStartTime = 0f;
+    private float pressStartTime = 2f;
     private float pressDurationThreshold = 2f;
 
     [SerializeField] private int currentObjectIndex;
@@ -38,9 +38,12 @@ public class ObjectCreator : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(worldPosition, Camera.main.transform.forward, out hit))
                 {
-                    createdObject = hit.collider.gameObject;
-                    pressStartTime = Time.time;
-                    isTouchingObject = true;
+                    // Check if the created object is already present
+                    if (createdObject == hit.collider.gameObject)
+                    {
+                        pressStartTime = Time.time;
+                        isTouchingObject = true;
+                    }
                 }
                 else
                 {
