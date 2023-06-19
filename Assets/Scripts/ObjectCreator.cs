@@ -4,12 +4,11 @@ using UnityEngine.EventSystems;
 public class ObjectCreator : MonoBehaviour
 {
     public GameObject[] spawnedObjects;
-
     private GameObject spawnedObject;
     private GameObject createdObject;
     private bool isDragging = false;
     private bool isTouchingObject = false;
-    private float pressStartTime = 2f;
+    private float pressStartTime = 0f;
     private float pressDurationThreshold = 2f;
 
     [SerializeField] private int currentObjectIndex;
@@ -17,7 +16,7 @@ public class ObjectCreator : MonoBehaviour
     void Start()
     {
         spawnedObject = spawnedObjects[currentObjectIndex];
-        spawnedObject.transform.localScale = Vector3.one * 3f;
+        spawnedObject.transform.localScale = Vector3.one;
     }
 
     void Update()
@@ -26,19 +25,17 @@ public class ObjectCreator : MonoBehaviour
         {
             if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
                 return;
-
             Touch touch = Input.GetTouch(0);
 
             if (touch.phase == TouchPhase.Began)
             {
                 Vector3 touchPosition = touch.position;
-                touchPosition.z = 10f; // Set the distance from the camera
+                touchPosition.z = 10f;
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(touchPosition);
 
                 RaycastHit hit;
                 if (Physics.Raycast(worldPosition, Camera.main.transform.forward, out hit))
                 {
-                    // Check if the created object is already present
                     if (createdObject == hit.collider.gameObject)
                     {
                         pressStartTime = Time.time;
@@ -47,7 +44,7 @@ public class ObjectCreator : MonoBehaviour
                 }
                 else
                 {
-                    Quaternion rotation = Quaternion.Euler(0f, 180f, 0f); // Rotate around y-axis by 180 degrees
+                    Quaternion rotation = Quaternion.Euler(0f, 180f, 0f);
                     createdObject = Instantiate(spawnedObject, worldPosition, rotation);
                     pressStartTime = Time.time;
                     isTouchingObject = true;
@@ -90,12 +87,9 @@ public class ObjectCreator : MonoBehaviour
             currentObjectIndex = 0;
         spawnedObject = spawnedObjects[currentObjectIndex];
 
-        // 셀카모드시 크기 오류나서 강제로 키움
         if (spawnedObject.gameObject.name.Contains("humanoid"))
         {
-            spawnedObject.transform.localScale = Vector3.one * 3f;
+            spawnedObject.transform.localScale = Vector3.one;
         }
-
-        Debug.Log(spawnedObject.name);
     }
 }

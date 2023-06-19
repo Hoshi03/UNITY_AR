@@ -7,7 +7,6 @@ using UnityEngine.XR.ARSubsystems;
 
 public class ARController : MonoBehaviour
 {
-    // »ý¼ºÇÒ °´Ã¼
     public GameObject[] spawnedObjects;
 
     private GameObject spawnedObject;
@@ -55,9 +54,11 @@ public class ARController : MonoBehaviour
                         }
                         else
                         {
-                            if (raycastMgr.Raycast(touch.position, hits, TrackableType.PlaneWithinPolygon))
+                            if (raycastMgr.Raycast(touch.position, hits, 
+                                TrackableType.PlaneWithinPolygon))
                             {
-                                Quaternion rotation = hits[0].pose.rotation * Quaternion.Euler(0, 180, 0);
+                                Quaternion rotation = hits[0].pose.rotation * 
+                                Quaternion.Euler(0, 180, 0);
                                 Instantiate(spawnedObject, hits[0].pose.position, rotation);
                             }
                         }
